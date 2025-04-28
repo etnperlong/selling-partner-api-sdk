@@ -1,0 +1,41 @@
+name: Documentation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+
+jobs:
+  docs:
+    name: Generate and publish documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build common package
+        run: pnpm turbo run build --filter=@sp-api-sdk/common
+
+      - name: Build documentation
+        run: pnpm run docs
+        env:
+          NODE_OPTIONS: --max_old_space_size=6144
+
+      - name: Deploy documentation
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: docs
+          folder: docs-json
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "docs: update documentation"

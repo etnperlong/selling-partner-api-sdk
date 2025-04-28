@@ -1,7 +1,7 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "name": "Selling Partner API SDK for JavaScript",
-  "out": "docs",
+  "json": "docs-json/docs.json",
   "entryPointStrategy": "packages",
   "entryPoints": ["packages/*", "clients/*"]
 }
